@@ -6,6 +6,7 @@ import com.pb.demoparkapi.web.dto.UsuarioCreateDTO;
 import com.pb.demoparkapi.web.dto.UsuarioResponseDTO;
 import com.pb.demoparkapi.web.dto.UsuarioSenhaDTO;
 import com.pb.demoparkapi.web.dto.mapper.UsuarioMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> create(@RequestBody UsuarioCreateDTO createDTO) {
+    public ResponseEntity<UsuarioResponseDTO> create(@Valid @RequestBody UsuarioCreateDTO createDTO) {
         Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDTO(user));
     }
@@ -40,9 +41,9 @@ public class UsuarioController {
 
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> getAll() {
+    public ResponseEntity<List<UsuarioResponseDTO>> getAll() {
         List<Usuario> users = usuarioService.buscarTodos();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(UsuarioMapper.toListDTO(users));
     }
 }
 
