@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @EnableJpaAuditing
 @Configuration
-public class SpringJpaAudittingConfig implements AuditorAware<String> {
+public class SpringJpaAuditingConfig implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
@@ -18,6 +18,7 @@ public class SpringJpaAudittingConfig implements AuditorAware<String> {
         if (authentication != null && authentication.isAuthenticated()) {
             return Optional.of(authentication.getName());
         }
-        return Optional.empty();
+        return null;
     }
 }
+

@@ -50,6 +50,4 @@ public class ErrorMessage {
             this.errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
     }
-
-
 }

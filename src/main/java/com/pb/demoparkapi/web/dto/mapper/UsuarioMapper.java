@@ -15,7 +15,7 @@ public class UsuarioMapper {
         return new ModelMapper().map(createDto, Usuario.class);
     }
 
-    public static UsuarioResponseDTO toDTO(Usuario usuario) {
+    public static UsuarioResponseDTO toDto(Usuario usuario) {
         String role = usuario.getRole().name().substring("ROLE_".length());
         PropertyMap<Usuario, UsuarioResponseDTO> props = new PropertyMap<Usuario, UsuarioResponseDTO>() {
             @Override
@@ -28,8 +28,8 @@ public class UsuarioMapper {
         return mapper.map(usuario, UsuarioResponseDTO.class);
     }
 
-    public static List<UsuarioResponseDTO> toListDTO(List<Usuario> usuarios) {
-        return usuarios.stream().map(user -> toDTO(user)).collect(Collectors.toList());
+    public static List<UsuarioResponseDTO> toListDto(List<Usuario> usuarios) {
+        return usuarios.stream().map(user -> toDto(user)).collect(Collectors.toList());
     }
 
 }

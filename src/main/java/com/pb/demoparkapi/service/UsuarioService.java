@@ -2,6 +2,7 @@ package com.pb.demoparkapi.service;
 
 
 import com.pb.demoparkapi.entity.Usuario;
+import com.pb.demoparkapi.exception.PasswordInvalidException;
 import com.pb.demoparkapi.exception.UsernameUniqueViolationException;
 import com.pb.demoparkapi.repository.UsuarioRepository;
 import com.pb.demoparkapi.exception.EntityNotFoundException;
@@ -39,12 +40,12 @@ public class UsuarioService {
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
         if (!novaSenha.equals(confirmaSenha)) {
-            throw new IllegalArgumentException("Nova senha não confere com confirmação de senha.");
+            throw new PasswordInvalidException("Nova senha não confere com confirmação de senha.");
         }
 
         Usuario user = buscarPorId(id);
         if (!passwordEncoder.matches(senhaAtual, user.getPassword())) {
-            throw new IllegalArgumentException("Sua senha não confere.");
+            throw new PasswordInvalidException("Sua senha não confere.");
         }
 
         user.setPassword(passwordEncoder.encode(novaSenha));

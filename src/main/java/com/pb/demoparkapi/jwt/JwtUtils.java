@@ -54,7 +54,6 @@ public class JwtUtils {
         return new JwtToken(token);
     }
 
-
     private static Claims getClaimsFromToken(String token) {
         try {
             return Jwts.parser()
@@ -90,5 +89,4 @@ public class JwtUtils {
         }
         return token;
     }
-
 }

@@ -45,8 +45,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
-
     private void toAuthentication(HttpServletRequest request, String username) {
         UserDetails userDetails = detailsService.loadUserByUsername(username);
 
