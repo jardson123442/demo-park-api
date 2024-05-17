@@ -6,6 +6,7 @@ import com.pb.demoparkapi.exception.UsernameUniqueViolationException;
 import com.pb.demoparkapi.repository.UsuarioRepository;
 import com.pb.demoparkapi.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,18 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
         try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             return usuarioRepository.save(usuario);
-
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
-            throw new UsernameUniqueViolationException(String.format("Username %s já cadastrado", usuario.getUsername()));
+            throw new UsernameUniqueViolationException(String.format("Username '%s' já cadastrado", usuario.getUsername()));
         }
     }
+
 
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
@@ -37,7 +40,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
-        if (!novaSenha.equals(confirmaSenha)) {
+        if (!passwordEncoder.matches(senhaAtual, usuarioRepository.findById(id).get().getPassword())) {
             throw new RuntimeException("Nova senha não confere com confirmação de senha. ");
         }
 
