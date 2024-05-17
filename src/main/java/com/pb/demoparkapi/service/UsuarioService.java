@@ -29,7 +29,6 @@ public class UsuarioService {
         }
     }
 
-
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
@@ -37,18 +36,18 @@ public class UsuarioService {
         );
     }
 
-
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
-        if (!passwordEncoder.matches(senhaAtual, usuarioRepository.findById(id).get().getPassword())) {
-            throw new RuntimeException("Nova senha não confere com confirmação de senha. ");
+        if (!novaSenha.equals(confirmaSenha)) {
+            throw new IllegalArgumentException("Nova senha não confere com confirmação de senha.");
         }
 
         Usuario user = buscarPorId(id);
-        if (!user.getPassword().equals(senhaAtual)) {
-            throw new RuntimeException("Sua senha não confere.");
+        if (!passwordEncoder.matches(senhaAtual, user.getPassword())) {
+            throw new IllegalArgumentException("Sua senha não confere.");
         }
-        user.setPassword(novaSenha);
+
+        user.setPassword(passwordEncoder.encode(novaSenha));
         return user;
     }
 
@@ -69,3 +68,4 @@ public class UsuarioService {
         return usuarioRepository.findRoleByUsername(username);
     }
 }
+
